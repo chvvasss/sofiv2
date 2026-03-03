@@ -1,5 +1,5 @@
 """
-Sofiv2 - Astronomy Workspace Setup Script
+Star S - Astronomy Workspace Setup Script
 ==========================================
 Run this after cloning the repository to set up the full environment:
 
@@ -205,7 +205,7 @@ def run_tests():
 
 def main():
     print("=" * 60)
-    print("  Sofiv2 - Astronomy Workspace Setup")
+    print("  Star S - Astronomy Workspace Setup")
     print(f"  Python {sys.version.split()[0]} | {platform.system()} {platform.machine()}")
     print("=" * 60)
 

@@ -1,4 +1,4 @@
-# Sofiv2 — Render deployment dependencies
+# Star S — Render deployment dependencies
 numpy>=2.1.0
 pandas>=2.2.0
 scipy>=1.14.0

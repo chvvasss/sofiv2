@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sofiv2
+    name: star-s
     runtime: python
     buildCommand: pip install -r requirements-deploy.txt
     startCommand: gunicorn app:server --bind 0.0.0.0:$PORT --workers 2 --timeout 120

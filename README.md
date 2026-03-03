@@ -1,8 +1,8 @@
-# Sofiv2 — Star Catalog Analysis Dashboard
+# Star S — Star Catalog Analysis Dashboard
 
 Yildiz kataloglarinin karsilastirmali analizi icin web tabanli dashboard. Dash + Plotly ile interaktif grafikler, Astropy ile koordinat donusumleri, SIMBAD ile online veri sorgulama.
 
-**Canli Demo:** [sofiv2.onrender.com](https://sofiv2.onrender.com)
+**Canlı Demo:** [sofiv2.onrender.com](https://sofiv2.onrender.com)
 
 ---
 
@@ -85,9 +85,9 @@ Tum verilerin detayli beyaz formatta raporu.
 | **Koordinat Referansi** | ICRS sistemi, epoch, hassasiyet, donusum bilgileri |
 
 **Indirme formatlari:**
-- **CSV** — standart tablo (`sofiv2_catalog.csv`)
-- **JSON** — API uyumlu format (`sofiv2_catalog.json`)
-- **CSV + Galaktik** — l/b galaktik koordinatlar eklenmis (`sofiv2_catalog_full.csv`)
+- **CSV** — standart tablo (`stars_catalog.csv`)
+- **JSON** — API uyumlu format (`stars_catalog.json`)
+- **CSV + Galaktik** — l/b galaktik koordinatlar eklenmis (`stars_catalog_full.csv`)
 
 ### 4. Sky Map
 
@@ -161,7 +161,7 @@ Eger bulunamazsa ilk sayisal kolonlar RA/Dec/Mag olarak atanir.
 ## Proje Yapisi
 
 ```
-sofiv2/
+star-s/
 ├── app.py                  Ana Dash uygulamasi (~1170 satir)
 ├── assets/
 │   └── style.css           Dark space theme CSS (~700 satir)

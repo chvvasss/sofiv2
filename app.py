@@ -1,5 +1,5 @@
 """
-Sofiv2 - Star Catalog Analysis Dashboard
+Star S - Star Catalog Analysis Dashboard
 =========================================
 Built with Dash + Plotly. Run:
     python app.py
@@ -24,7 +24,7 @@ MODERN = ROOT / "Modern"
 PROCESSED = ROOT / "Processed"
 
 app = Dash(__name__, suppress_callback_exceptions=True)
-app.title = "Sofiv2 — Star Catalog Analysis"
+app.title = "Star S — Star Catalog Analysis"
 
 
 # ═══════════════════════════════════════════════════════════
@@ -258,7 +258,7 @@ def make_sidebar():
     return html.Nav(className="sidebar", children=[
         html.Div(className="sidebar-logo", children=[
             html.Div("🌌", className="icon"),
-            html.H1("SOFIV2"),
+            html.H1("STAR S"),
             html.P("Star Catalog Analysis"),
         ]),
         html.Div(className="sidebar-nav", children=[
@@ -274,7 +274,7 @@ def make_sidebar():
             ],
         ]),
         html.Div(className="sidebar-footer", children=[
-            html.P("v2.0 DASH EDITION"),
+            html.P("STAR S — DASH EDITION"),
         ]),
     ])
 
@@ -1123,7 +1123,7 @@ def download_csv(n):
     df = load_template_csv()
     if df is None:
         return no_update
-    return dcc.send_data_frame(df.to_csv, "sofiv2_catalog.csv", index=False)
+    return dcc.send_data_frame(df.to_csv, "stars_catalog.csv", index=False)
 
 
 @callback(
@@ -1137,7 +1137,7 @@ def download_json(n):
     df = load_template_csv()
     if df is None:
         return no_update
-    return dcc.send_data_frame(df.to_json, "sofiv2_catalog.json", orient="records", indent=2)
+    return dcc.send_data_frame(df.to_json, "stars_catalog.json", orient="records", indent=2)
 
 
 @callback(
@@ -1161,7 +1161,7 @@ def download_full(n):
             df["b_Galactic"] = [round(g.b.degree, 6) for g in gal]
         except Exception:
             pass
-    return dcc.send_data_frame(df.to_csv, "sofiv2_catalog_full.csv", index=False)
+    return dcc.send_data_frame(df.to_csv, "stars_catalog_full.csv", index=False)
 
 
 # ═══════════════════════════════════════════════════════════
