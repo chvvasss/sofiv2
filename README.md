@@ -27,7 +27,10 @@ source .venv/Scripts/activate   # Windows (Git Bash)
 .venv\Scripts\activate          # Windows (CMD)
 source .venv/bin/activate       # Linux/macOS
 
-# Jupyter Notebook aç (tarayıcıda interaktif analiz)
+# Web arayüzü (tarayıcıda dashboard)
+streamlit run app.py
+
+# Jupyter Notebook aç (interaktif analiz)
 jupyter notebook notebooks/analysis.ipynb
 
 # TOPCAT GUI aç (tablo görselleştirme ve cross-match)
