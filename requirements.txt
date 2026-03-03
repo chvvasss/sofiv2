@@ -18,3 +18,4 @@ jupyter>=1.0.0
 # Web UI
 streamlit>=1.30.0
 plotly>=5.18.0
+dash>=2.18.0
