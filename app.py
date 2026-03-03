@@ -192,39 +192,50 @@ def make_sky_chart(df, ra, dec, name, mag=None, title="Sky Map", height=460):
 
 
 def make_data_table(df, page_size=15):
+    display = df.copy()
+    for col in display.select_dtypes(include=[np.number]).columns:
+        display[col] = display[col].round(4)
     return dash_table.DataTable(
-        data=df.round(4).to_dict("records"),
-        columns=[{"name": c, "id": c} for c in df.columns],
+        data=display.to_dict("records"),
+        columns=[{"name": c, "id": c} for c in display.columns],
         page_size=page_size,
         sort_action="native",
         filter_action="native",
         style_as_list_view=True,
+        style_table={"borderRadius": "10px", "overflow": "hidden", "border": "1px solid #e5e7eb"},
         style_header={
-            "backgroundColor": "#0c0d14",
-            "color": "#6b7280",
+            "backgroundColor": "#f8fafc",
+            "color": "#475569",
             "fontWeight": "600",
-            "fontSize": "0.7rem",
+            "fontSize": "0.72rem",
             "textTransform": "uppercase",
             "letterSpacing": "0.5px",
-            "borderBottom": "1px solid #1e2035",
+            "borderBottom": "2px solid #e2e8f0",
             "fontFamily": "Inter, sans-serif",
+            "padding": "10px 14px",
         },
         style_cell={
-            "backgroundColor": "#10111a",
-            "color": "#c8ccd4",
-            "borderColor": "#1a1c2e",
+            "backgroundColor": "#ffffff",
+            "color": "#1e293b",
+            "borderColor": "#f1f5f9",
             "fontFamily": "JetBrains Mono, monospace",
             "fontSize": "0.8rem",
-            "padding": "8px 12px",
+            "padding": "9px 14px",
             "textAlign": "left",
+            "maxWidth": "200px",
+            "overflow": "hidden",
+            "textOverflow": "ellipsis",
         },
         style_data_conditional=[
-            {"if": {"state": "active"}, "backgroundColor": "#161826", "border": "1px solid #313456"},
+            {"if": {"row_index": "odd"}, "backgroundColor": "#f8fafc"},
+            {"if": {"state": "active"}, "backgroundColor": "#eef2ff", "border": "1px solid #818cf8"},
         ],
         style_filter={
-            "backgroundColor": "#0c0d14",
-            "color": "#c8ccd4",
-            "borderColor": "#1e2035",
+            "backgroundColor": "#f8fafc",
+            "color": "#1e293b",
+            "borderColor": "#e2e8f0",
+            "fontFamily": "Inter, sans-serif",
+            "fontSize": "0.8rem",
         },
     )
 
@@ -359,12 +370,25 @@ def page_catalog():
             html.H1("Catalog Viewer"),
             html.P("CSV, FITS ve VOTable dosyalarini yukle ve incele"),
         ]),
-        # Tab bar
         html.Div(className="tab-bar", children=[
             html.Button("Dosya Yukle", id="cat-tab-upload", className="tab-item active", n_clicks=0),
             html.Button("Sablon Kataloglar", id="cat-tab-template", className="tab-item", n_clicks=0),
         ]),
-        html.Div(id="cat-tab-content"),
+        html.Div(id="cat-tab-content", children=[
+            # Initial content: upload tab
+            html.Div(className="section-card", children=[
+                dcc.Upload(
+                    id="catalog-upload",
+                    children=html.Div(className="upload-area", children=[
+                        html.Div("📁", className="upload-icon"),
+                        html.P(["Dosyayi surukle veya ", html.A("sec")]),
+                        html.P("CSV, FITS, VOTable", style={"fontSize": "0.75rem", "color": "#4b5563"}),
+                    ]),
+                    multiple=False,
+                ),
+                html.Div(id="catalog-upload-result"),
+            ]),
+        ]),
     ])
 
 
@@ -559,12 +583,26 @@ def page_simbad():
             html.H1("SIMBAD Query"),
             html.P("Astronomik veritabanindan yildiz bilgisi cek — internet gerektirir"),
         ]),
-        # Tab bar
         html.Div(className="tab-bar", children=[
             html.Button("Isimle Ara", id="sim-tab-name", className="tab-item active", n_clicks=0),
             html.Button("Bolge Aramasi", id="sim-tab-region", className="tab-item", n_clicks=0),
         ]),
-        html.Div(id="simbad-form"),
+        html.Div(id="simbad-form", children=[
+            # Initial content: name search
+            html.Div(className="section-card", children=[
+                html.Div(className="form-row", children=[
+                    html.Div(className="form-group", children=[
+                        html.Label("Yildiz Adi"),
+                        dcc.Input(id="simbad-name", type="text", value="Sirius",
+                                  style={"width": "100%"}),
+                    ]),
+                    html.Div(style={"paddingBottom": "2px"}, children=[
+                        html.Button("Sorgula", id="simbad-search-btn",
+                                    className="btn btn-primary", n_clicks=0),
+                    ]),
+                ]),
+            ]),
+        ]),
         html.Div(id="simbad-result"),
     ])
 

@@ -310,7 +310,8 @@ body {
 }
 
 /* ── FORM ELEMENTS ── */
-select, input[type="text"], input[type="number"] {
+select, input[type="text"], input[type="number"],
+.dash-input {
     background: #10111a !important;
     border: 1px solid #1e2035 !important;
     border-radius: 8px !important;
@@ -322,9 +323,18 @@ select, input[type="text"], input[type="number"] {
     width: 100%;
     transition: border-color 0.15s;
 }
-select:focus, input:focus {
+select:focus, input:focus, .dash-input:focus {
     border-color: #818cf8 !important;
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15) !important;
+}
+/* Dash filter inputs in light table */
+.dash-spreadsheet-container input {
+    background: #f8fafc !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    font-size: 0.78rem !important;
 }
 
 label {
@@ -348,32 +358,25 @@ label {
     flex: 1;
 }
 
-/* ── DATA TABLE ── */
+/* ── DATA TABLE (light theme) ── */
 .dash-table-container {
     border-radius: 10px !important;
     overflow: hidden;
-    border: 1px solid #1e2035;
-}
-.dash-spreadsheet-container .dash-spreadsheet-inner td,
-.dash-spreadsheet-container .dash-spreadsheet-inner th {
-    background: #10111a !important;
-    color: #c8ccd4 !important;
-    border-color: #1a1c2e !important;
-    font-family: 'JetBrains Mono', monospace !important;
-    font-size: 0.8rem !important;
-    padding: 8px 12px !important;
-}
-.dash-spreadsheet-container .dash-spreadsheet-inner th {
-    background: #0c0d14 !important;
-    color: #6b7280 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 600 !important;
-    text-transform: uppercase;
-    font-size: 0.7rem !important;
-    letter-spacing: 0.5px;
 }
 .dash-spreadsheet-container .dash-spreadsheet-inner tr:hover td {
-    background: #161826 !important;
+    background: #f1f5f9 !important;
+}
+/* pagination buttons */
+.dash-table-container .previous-next-container button {
+    color: #475569 !important;
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    font-family: 'Inter', sans-serif !important;
+}
+.dash-table-container .previous-next-container button:hover {
+    background: #eef2ff !important;
+    border-color: #818cf8 !important;
 }
 
 /* ── ALERT ── */
