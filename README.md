@@ -2,6 +2,41 @@
 
 Yıldız kataloglarının karşılaştırmalı analizi için Python ve TOPCAT/STILTS tabanlı çalışma alanı.
 
+## Hızlı Başlangıç
+
+Repo'yu klonladıktan sonra **tek komutla** tüm ortamı kurabilirsiniz:
+
+```bash
+git clone https://github.com/chvvasss/sofiv2.git
+cd sofiv2
+python setup.py
+```
+
+Bu komut otomatik olarak:
+- Python sanal ortamı oluşturur (`.venv/`)
+- Tüm paketleri kurar (astropy, pandas, numpy, matplotlib, seaborn, astroquery, scipy, jupyter)
+- TOPCAT, STILTS ve portable OpenJDK indirir
+- Şablon FITS/VOTable dosyalarını üretir
+- Doğrulama testlerini çalıştırır
+
+## Kullanım
+
+```bash
+# Ortamı aktifleştir
+source .venv/Scripts/activate   # Windows (Git Bash)
+.venv\Scripts\activate          # Windows (CMD)
+source .venv/bin/activate       # Linux/macOS
+
+# Jupyter Notebook aç (tarayıcıda interaktif analiz)
+jupyter notebook notebooks/analysis.ipynb
+
+# TOPCAT GUI aç (tablo görselleştirme ve cross-match)
+tools\topcat.bat
+
+# STILTS komut satırı (büyük tablo işlemleri)
+tools\stilts.bat tpipe in=templates/star_catalog_template.csv ifmt=csv omode=stats
+```
+
 ## Proje Yapısı
 
 ```
@@ -14,36 +49,9 @@ sofiv2/
 ├── scripts/           Python betikleri
 ├── templates/         Şablon tablolar (CSV, FITS, VOTable)
 ├── tools/             TOPCAT, STILTS, portable Java
+├── notebooks/         Jupyter Notebook'lar
 └── tests/             Test ve doğrulama betikleri
 ```
-
-## Kurulum
-
-### Python Ortamı
-
-```bash
-python -m venv .venv
-source .venv/Scripts/activate   # Windows (Git Bash)
-# veya: .venv\Scripts\activate  # Windows (CMD)
-pip install -r requirements.txt
-```
-
-### Şablon Tabloları Oluşturma
-
-```bash
-python scripts/create_template_fits.py
-```
-
-Bu komut `templates/` altında FITS ve VOTable formatlarında şablon dosyalar üretir.
-
-### TOPCAT / STILTS
-
-```bash
-tools\topcat.bat                # GUI başlatır
-tools\stilts.bat tpipe ...      # Komut satırı
-```
-
-Portable OpenJDK 21 JRE `tools/java/` dizininde bulunur. Sistem geneli Java kurulumu gerekmez.
 
 ## Şablon Tablo Kolonları
 
@@ -61,7 +69,7 @@ Portable OpenJDK 21 JRE `tools/java/` dizininde bulunur. Sistem geneli Java kuru
 | Notes | Ek notlar |
 | Reference | Katalog referansı |
 
-## Testleri Çalıştırma
+## Testler
 
 ```bash
 python tests/test_packages.py

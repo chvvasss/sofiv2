@@ -49,7 +49,6 @@ tools/java/
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
 
 # Generated plots
 Visualizations/*.png
