@@ -246,6 +246,7 @@ def make_data_table(df, page_size=15):
 NAV_ITEMS = [
     ("dashboard", "Dashboard", "📊"),
     ("catalog", "Catalog Viewer", "📋"),
+    ("dataview", "Data Report", "📄"),
     ("skymap", "Sky Map", "🗺️"),
     ("magnitude", "Magnitude Analysis", "💡"),
     ("crossmatch", "Cross-Match", "🔗"),
@@ -298,27 +299,27 @@ def page_dashboard():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("Dashboard"),
-            html.P("Yildiz katalog verilerine genel bakis"),
+            html.P("Yıldız katalog verilerine genel bakış"),
         ]),
         # Stats
         html.Div(className="stat-grid", children=[
             html.Div(className="stat-card", children=[
-                html.Div("Yildiz Sayisi", className="stat-label"),
+                html.Div("Yıldız Sayısı", className="stat-label"),
                 html.Div(str(n_stars), className="stat-value"),
                 html.Div("template catalog", className="stat-sub"),
             ]),
             html.Div(className="stat-card", children=[
-                html.Div("Katalog Sayisi", className="stat-label"),
+                html.Div("Katalog Sayısı", className="stat-label"),
                 html.Div(str(n_cats), className="stat-value"),
                 html.Div("unique sources", className="stat-sub"),
             ]),
             html.Div(className="stat-card", children=[
-                html.Div("Desteklenen Format", className="stat-label"),
+                html.Div("Desteklenen Formatlar", className="stat-label"),
                 html.Div("3", className="stat-value"),
                 html.Div("CSV · FITS · VOTable", className="stat-sub"),
             ]),
             html.Div(className="stat-card", children=[
-                html.Div("Ort. Parlaklik", className="stat-label"),
+                html.Div("Ort. Parlaklık", className="stat-label"),
                 html.Div(f"{avg_mag:.2f}", className="stat-value"),
                 html.Div("magnitude (V/G)", className="stat-sub"),
             ]),
@@ -326,7 +327,7 @@ def page_dashboard():
         # Chart + Sidebar
         html.Div(className="grid-5-3", children=[
             html.Div(className="section-card", children=[
-                html.H3("Gokyuzu Onizleme"),
+                html.H3("Gökyüzü Önizleme"),
                 sky_chart,
             ]),
             html.Div(children=[
@@ -339,24 +340,24 @@ def page_dashboard():
                                 html.Div(desc, className="dir-desc"),
                             ]),
                             html.Span(
-                                f"{count_files(path)} dosya" if count_files(path) > 0 else "bos",
+                                f"{count_files(path)} dosya" if count_files(path) > 0 else "boş",
                                 className=f"badge {'badge-green' if count_files(path) > 0 else 'badge-default'}",
                             ),
                         ])
                         for name, path, desc in [
                             ("Historical/", HISTORICAL, "Tarihi kataloglar"),
                             ("Modern/", MODERN, "Gaia, SDSS, Pan-STARRS"),
-                            ("Processed/", PROCESSED, "Islenmus veriler"),
+                            ("Processed/", PROCESSED, "İşlenmiş veriler"),
                         ]
                     ],
                 ]),
                 html.Div(className="section-card", children=[
-                    html.H3("Hizli Baslangic"),
+                    html.H3("Hızlı Başlangıç"),
                     html.Ul(className="quick-list", children=[
-                        html.Li([html.Span("1", className="step-num"), html.Strong("Catalog Viewer"), " — dosya yukle"]),
-                        html.Li([html.Span("2", className="step-num"), html.Strong("Sky Map"), " — koordinatlari gor"]),
-                        html.Li([html.Span("3", className="step-num"), html.Strong("Cross-Match"), " — kataloglari eslestir"]),
-                        html.Li([html.Span("4", className="step-num"), html.Strong("SIMBAD"), " — online veri cek"]),
+                        html.Li([html.Span("1", className="step-num"), html.Strong("Catalog Viewer"), " — dosya yükle"]),
+                        html.Li([html.Span("2", className="step-num"), html.Strong("Sky Map"), " — koordinatları gör"]),
+                        html.Li([html.Span("3", className="step-num"), html.Strong("Cross-Match"), " — katalogları eşleştir"]),
+                        html.Li([html.Span("4", className="step-num"), html.Strong("SIMBAD"), " — online veri çek"]),
                     ]),
                 ]),
             ]),
@@ -368,11 +369,11 @@ def page_catalog():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("Catalog Viewer"),
-            html.P("CSV, FITS ve VOTable dosyalarini yukle ve incele"),
+            html.P("CSV, FITS ve VOTable dosyalarını yükle ve incele"),
         ]),
         html.Div(className="tab-bar", children=[
-            html.Button("Dosya Yukle", id="cat-tab-upload", className="tab-item active", n_clicks=0),
-            html.Button("Sablon Kataloglar", id="cat-tab-template", className="tab-item", n_clicks=0),
+            html.Button("Dosya Yükle", id="cat-tab-upload", className="tab-item active", n_clicks=0),
+            html.Button("Şablon Kataloglar", id="cat-tab-template", className="tab-item", n_clicks=0),
         ]),
         html.Div(id="cat-tab-content", children=[
             # Initial content: upload tab
@@ -381,12 +382,251 @@ def page_catalog():
                     id="catalog-upload",
                     children=html.Div(className="upload-area", children=[
                         html.Div("📁", className="upload-icon"),
-                        html.P(["Dosyayi surukle veya ", html.A("sec")]),
+                        html.P(["Dosyayı sürükle veya ", html.A("seç")]),
                         html.P("CSV, FITS, VOTable", style={"fontSize": "0.75rem", "color": "#4b5563"}),
                     ]),
                     multiple=False,
                 ),
                 html.Div(id="catalog-upload-result"),
+            ]),
+        ]),
+    ])
+
+
+def page_dataview():
+    df = load_template_csv()
+    if df is None:
+        return html.Div([
+            html.Div(className="page-header", children=[
+                html.H1("Data Report"),
+                html.P("Detaylı veri raporu ve indirme"),
+            ]),
+            html.Div("Şablon katalog bulunamadı.", className="alert alert-warning"),
+        ])
+
+    det = auto_detect(df)
+    name_col = det["name"] or df.columns[0]
+    ra_col = det["ra"]
+    dec_col = det["dec"]
+    mag_col = det["mag"]
+
+    # Also load all files from directories
+    all_catalogs = []
+    all_catalogs.append(("Template Catalog", df))
+
+    for folder, label in [(HISTORICAL, "Historical"), (MODERN, "Modern"), (PROCESSED, "Processed")]:
+        if folder.exists():
+            for f in folder.glob("*.csv"):
+                try:
+                    extra = pd.read_csv(f)
+                    all_catalogs.append((f"{label}/{f.name}", extra))
+                except Exception:
+                    pass
+
+    # Compute galactic coordinates if possible
+    gal_data = None
+    if ra_col and dec_col:
+        try:
+            coords = compute_coords(df, ra_col, dec_col)
+            gal = coords.galactic
+            gal_data = pd.DataFrame({
+                "l_gal": [round(g.l.degree, 6) for g in gal],
+                "b_gal": [round(g.b.degree, 6) for g in gal],
+            })
+        except Exception:
+            pass
+
+    # Build individual star cards
+    star_cards = []
+    for idx, row in df.iterrows():
+        star_name = str(row.get(name_col, f"Star {idx+1}"))
+        card_items = []
+        for col in df.columns:
+            val = row[col]
+            if pd.notna(val):
+                if isinstance(val, float):
+                    display_val = f"{val:.6f}" if abs(val) > 0.001 else f"{val:.8f}"
+                else:
+                    display_val = str(val)
+                card_items.append(
+                    html.Div(className="report-field", children=[
+                        html.Span(col, className="report-field-label"),
+                        html.Span(display_val, className="report-field-value"),
+                    ])
+                )
+
+        # Galactic coords
+        if gal_data is not None and idx < len(gal_data):
+            card_items.append(
+                html.Div(className="report-field", children=[
+                    html.Span("l (Gal Lon)", className="report-field-label"),
+                    html.Span(f"{gal_data.iloc[idx]['l_gal']:.6f}°", className="report-field-value"),
+                ])
+            )
+            card_items.append(
+                html.Div(className="report-field", children=[
+                    html.Span("b (Gal Lat)", className="report-field-label"),
+                    html.Span(f"{gal_data.iloc[idx]['b_gal']:.6f}°", className="report-field-value"),
+                ])
+            )
+
+        mag_badge = ""
+        if mag_col and pd.notna(row.get(mag_col)):
+            mv = row[mag_col]
+            if mv < 0:
+                mag_badge = html.Span("Very Bright", className="badge badge-green")
+            elif mv < 1.0:
+                mag_badge = html.Span("Bright", className="badge badge-amber")
+            else:
+                mag_badge = html.Span(f"Mag {mv:.2f}", className="badge badge-default")
+
+        star_cards.append(
+            html.Div(className="report-star-card", children=[
+                html.Div(className="report-star-header", children=[
+                    html.Div(children=[
+                        html.H4(star_name, className="report-star-name"),
+                        html.Span(str(row.get("Catalog", "")), className="report-star-catalog"),
+                    ]),
+                    mag_badge,
+                ]),
+                html.Div(className="report-star-fields", children=card_items),
+            ])
+        )
+
+    # Summary stats
+    numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    stats_rows = []
+    for col in numeric_cols:
+        s = df[col].describe()
+        stats_rows.append({
+            "Column": col,
+            "Count": int(s["count"]),
+            "Min": round(s["min"], 6),
+            "Max": round(s["max"], 6),
+            "Mean": round(s["mean"], 6),
+            "Std": round(s["std"], 6),
+            "Median": round(df[col].median(), 6),
+        })
+    stats_df = pd.DataFrame(stats_rows)
+
+    # Data completeness
+    completeness_items = []
+    for col in df.columns:
+        total = len(df)
+        non_null = df[col].notna().sum()
+        pct = (non_null / total) * 100
+        bar_color = "#10b981" if pct == 100 else "#f59e0b" if pct >= 75 else "#ef4444"
+        completeness_items.append(
+            html.Div(className="completeness-row", children=[
+                html.Span(col, className="completeness-col"),
+                html.Div(className="completeness-bar-bg", children=[
+                    html.Div(className="completeness-bar-fill",
+                             style={"width": f"{pct}%", "backgroundColor": bar_color}),
+                ]),
+                html.Span(f"{pct:.0f}%", className="completeness-pct"),
+            ])
+        )
+
+    return html.Div([
+        html.Div(className="page-header", children=[
+            html.H1("Data Report"),
+            html.P("Tüm katalog verilerinin detaylı raporu — indirme seçenekleri"),
+        ]),
+
+        # Download section
+        html.Div(className="report-download-bar", children=[
+            html.Div(children=[
+                html.Span("📥", style={"fontSize": "1.2rem"}),
+                html.Span("Veri İndirme", style={"fontWeight": "700", "color": "#1e293b", "fontSize": "0.95rem"}),
+                html.Span(f"({len(df)} yıldız, {len(df.columns)} kolon)",
+                          style={"color": "#64748b", "fontSize": "0.82rem"}),
+            ], style={"display": "flex", "alignItems": "center", "gap": "10px"}),
+            html.Div(children=[
+                html.Button([html.Span("📊"), " CSV"], id="dl-csv-btn",
+                            className="btn btn-primary", n_clicks=0),
+                html.Button([html.Span("📋"), " JSON"], id="dl-json-btn",
+                            className="btn btn-ghost", n_clicks=0),
+                html.Button([html.Span("📐"), " CSV + Galaktik"], id="dl-full-btn",
+                            className="btn btn-ghost", n_clicks=0),
+            ], style={"display": "flex", "gap": "8px"}),
+        ]),
+        dcc.Download(id="download-csv"),
+        dcc.Download(id="download-json"),
+        dcc.Download(id="download-full"),
+
+        # Alert info
+        html.Div(className="alert alert-info", style={"marginBottom": "16px"}, children=[
+            f"Toplam {len(all_catalogs)} katalog yüklü — "
+            f"Sayısal kolon: {len(numeric_cols)} — "
+            f"Veri tamlılık: {df.notna().sum().sum()}/{df.size} hücre"
+        ]),
+
+        # Full data table (white theme)
+        html.Div(className="report-table-section", children=[
+            html.Div(className="report-section-header", children=[
+                html.H3("Tam Veri Tablosu"),
+                html.Span(f"{len(df)} satır × {len(df.columns)} kolon",
+                          className="report-section-meta"),
+            ]),
+            make_data_table(df, page_size=50),
+        ]),
+
+        # Column statistics
+        html.Div(className="report-table-section", style={"marginTop": "20px"}, children=[
+            html.Div(className="report-section-header", children=[
+                html.H3("Kolon İstatistikleri"),
+                html.Span(f"{len(numeric_cols)} sayısal kolon", className="report-section-meta"),
+            ]),
+            make_data_table(stats_df, page_size=20) if len(stats_df) > 0 else html.Div(
+                "Sayısal kolon bulunamadı.", className="alert alert-warning"
+            ),
+        ]),
+
+        # Data completeness
+        html.Div(className="report-table-section", style={"marginTop": "20px"}, children=[
+            html.Div(className="report-section-header", children=[
+                html.H3("Veri Tamlılığı"),
+                html.Span("kolon bazında doluluk oranı", className="report-section-meta"),
+            ]),
+            html.Div(className="completeness-container", children=completeness_items),
+        ]),
+
+        # Star detail cards
+        html.Div(className="report-table-section", style={"marginTop": "20px"}, children=[
+            html.Div(className="report-section-header", children=[
+                html.H3("Yıldız Detayları"),
+                html.Span(f"{len(df)} yıldız — tüm alanlar", className="report-section-meta"),
+            ]),
+            html.Div(className="report-star-grid", children=star_cards),
+        ]),
+
+        # Coordinate reference
+        html.Div(className="report-table-section", style={"marginTop": "20px"}, children=[
+            html.Div(className="report-section-header", children=[
+                html.H3("Koordinat Referansı"),
+                html.Span("ICRS J2000 + Galaktik", className="report-section-meta"),
+            ]),
+            html.Div(className="report-coord-info", children=[
+                html.Div(className="report-coord-item", children=[
+                    html.Span("Referans Sistemi", className="report-field-label"),
+                    html.Span("ICRS (International Celestial Reference System)", className="report-field-value"),
+                ]),
+                html.Div(className="report-coord-item", children=[
+                    html.Span("Epoch", className="report-field-label"),
+                    html.Span("J2000.0 (tüm koordinatlar dönüştürülmüş)", className="report-field-value"),
+                ]),
+                html.Div(className="report-coord-item", children=[
+                    html.Span("RA Hassasiyet", className="report-field-label"),
+                    html.Span("4-6 ondalık (~ 0.36 arcsec)", className="report-field-value"),
+                ]),
+                html.Div(className="report-coord-item", children=[
+                    html.Span("Dec Hassasiyet", className="report-field-label"),
+                    html.Span("4-6 ondalık (~ 0.36 arcsec)", className="report-field-value"),
+                ]),
+                html.Div(className="report-coord-item", children=[
+                    html.Span("Galaktik Dönüşüm", className="report-field-label"),
+                    html.Span("Astropy SkyCoord ile hesaplandı", className="report-field-value"),
+                ]),
             ]),
         ]),
     ])
@@ -420,7 +660,7 @@ def page_skymap():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("Sky Map"),
-            html.P("Yildizlari RA/Dec koordinatlarinda interaktif haritada goruntule"),
+            html.P("Yıldızları RA/Dec koordinatlarında interaktif haritada görüntüle"),
         ]),
         html.Div(className="section-card", children=[chart]),
         gal_table,
@@ -431,8 +671,8 @@ def page_magnitude():
     df = load_template_csv()
     if df is None:
         return html.Div([
-            html.Div(className="page-header", children=[html.H1("Magnitude Analysis"), html.P("Parlaklik analizi")]),
-            html.Div("Sablon katalog bulunamadi.", className="alert alert-warning"),
+            html.Div(className="page-header", children=[html.H1("Magnitude Analysis"), html.P("Parlaklık analizi")]),
+            html.Div("Şablon katalog bulunamadı.", className="alert alert-warning"),
         ])
 
     det = auto_detect(df)
@@ -483,7 +723,7 @@ def page_magnitude():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("Magnitude Analysis"),
-            html.P("Parlaklik dagilimi, histogram ve istatistiksel analiz"),
+            html.P("Parlaklık dağılımı, histogram ve istatistiksel analiz"),
         ]),
         html.Div(className="section-card", children=[
             dcc.Graph(figure=fig_bar, config={"displaylogo": False}),
@@ -522,7 +762,7 @@ def page_crossmatch():
     if df is None:
         return html.Div([
             html.Div(className="page-header", children=[html.H1("Cross-Match")]),
-            html.Div("Sablon katalog bulunamadi.", className="alert alert-warning"),
+            html.Div("Şablon katalog bulunamadı.", className="alert alert-warning"),
         ])
 
     det = auto_detect(df)
@@ -565,13 +805,13 @@ def page_crossmatch():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("Cross-Match"),
-            html.P("Katalog ici aci mesafe analizi — dosya yukleme icin Catalog Viewer kullanin"),
+            html.P("Katalog içi açı mesafe analizi — dosya yükleme için Catalog Viewer kullanın"),
         ]),
         html.Div(className="section-card", children=[
             dcc.Graph(figure=fig_heat, config={"displaylogo": False}),
         ]),
         html.Div(className="section-card", style={"marginTop": "16px"}, children=[
-            html.H3("Tum Yildiz Cifti Mesafeleri"),
+            html.H3("Tüm Yıldız Çifti Mesafeleri"),
             make_data_table(match_df, page_size=10),
         ]),
     ])
@@ -581,18 +821,18 @@ def page_simbad():
     return html.Div([
         html.Div(className="page-header", children=[
             html.H1("SIMBAD Query"),
-            html.P("Astronomik veritabanindan yildiz bilgisi cek — internet gerektirir"),
+            html.P("Astronomik veritabanından yıldız bilgisi çek — internet gerektirir"),
         ]),
         html.Div(className="tab-bar", children=[
-            html.Button("Isimle Ara", id="sim-tab-name", className="tab-item active", n_clicks=0),
-            html.Button("Bolge Aramasi", id="sim-tab-region", className="tab-item", n_clicks=0),
+            html.Button("İsimle Ara", id="sim-tab-name", className="tab-item active", n_clicks=0),
+            html.Button("Bölge Araması", id="sim-tab-region", className="tab-item", n_clicks=0),
         ]),
         html.Div(id="simbad-form", children=[
             # Initial content: name search
             html.Div(className="section-card", children=[
                 html.Div(className="form-row", children=[
                     html.Div(className="form-group", children=[
-                        html.Label("Yildiz Adi"),
+                        html.Label("Yıldız Adı"),
                         dcc.Input(id="simbad-name", type="text", value="Sirius",
                                   style={"width": "100%"}),
                     ]),
@@ -643,6 +883,7 @@ def navigate(*args):
     pages = {
         "dashboard": page_dashboard,
         "catalog": page_catalog,
+        "dataview": page_dataview,
         "skymap": page_skymap,
         "magnitude": page_magnitude,
         "crossmatch": page_crossmatch,
@@ -686,7 +927,7 @@ def switch_catalog_tab(n_upload, n_template, current):
                 id="catalog-upload",
                 children=html.Div(className="upload-area", children=[
                     html.Div("📁", className="upload-icon"),
-                    html.P(["Dosyayi surukle veya ", html.A("sec")]),
+                    html.P(["Dosyayı sürükle veya ", html.A("seç")]),
                     html.P("CSV, FITS, VOTable", style={"fontSize": "0.75rem", "color": "#4b5563"}),
                 ]),
                 multiple=False,
@@ -698,12 +939,12 @@ def switch_catalog_tab(n_upload, n_template, current):
         if df is not None:
             content = html.Div(className="section-card", children=[
                 html.Div(className="alert alert-info", children=[
-                    f"Sablon katalog: {len(df)} yildiz, {len(df.columns)} kolon"
+                    f"Şablon katalog: {len(df)} yıldız, {len(df.columns)} kolon"
                 ]),
                 make_data_table(df),
             ])
         else:
-            content = html.Div(className="alert alert-warning", children=["Sablon bulunamadi."])
+            content = html.Div(className="alert alert-warning", children=["Şablon bulunamadı."])
 
     return (
         content,
@@ -725,10 +966,10 @@ def handle_catalog_upload(contents, filename):
         return no_update
     df = parse_upload(contents, filename)
     if df is None:
-        return html.Div(className="alert alert-error", children=["Dosya okunamadi."])
+        return html.Div(className="alert alert-error", children=["Dosya okunamadı."])
     return html.Div([
         html.Div(className="alert alert-success", children=[
-            f"{filename}: {len(df)} satir, {len(df.columns)} kolon"
+            f"{filename}: {len(df)} satır, {len(df.columns)} kolon"
         ]),
         make_data_table(df),
     ])
@@ -755,7 +996,7 @@ def switch_simbad_tab(n_name, n_region, current):
         form = html.Div(className="section-card", children=[
             html.Div(className="form-row", children=[
                 html.Div(className="form-group", children=[
-                    html.Label("Yildiz Adi"),
+                    html.Label("Yıldız Adı"),
                     dcc.Input(id="simbad-name", type="text", value="Sirius",
                               style={"width": "100%"}),
                 ]),
@@ -807,7 +1048,7 @@ def simbad_name_search(n, name):
     if isinstance(result, str):
         return html.Div(className="alert alert-error", children=[f"Hata: {result}"])
     if result is None:
-        return html.Div(className="alert alert-warning", children=[f"'{name}' bulunamadi."])
+        return html.Div(className="alert alert-warning", children=[f"'{name}' bulunamadı."])
     return html.Div(className="section-card", style={"marginTop": "16px"}, children=[
         html.Div(className="alert alert-success", children=[f"'{name}' bulundu!"]),
         make_data_table(result),
@@ -830,11 +1071,11 @@ def simbad_region_search(n, ra, dec, radius):
     if isinstance(result, str):
         return html.Div(className="alert alert-error", children=[f"Hata: {result}"])
     if result is None:
-        return html.Div(className="alert alert-warning", children=["Sonuc bulunamadi."])
+        return html.Div(className="alert alert-warning", children=["Sonuç bulunamadı."])
 
     children = [
         html.Div(className="alert alert-success", children=[
-            f"{len(result)} nesne bulundu ({radius}° yaricap)"
+            f"{len(result)} nesne bulundu ({radius}° yarıçap)"
         ]),
         make_data_table(result),
     ]
@@ -870,8 +1111,66 @@ def simbad_region_search(n, ra, dec, radius):
     return html.Div(className="section-card", style={"marginTop": "16px"}, children=children)
 
 
+# ── Download callbacks ──
+@callback(
+    Output("download-csv", "data"),
+    Input("dl-csv-btn", "n_clicks"),
+    prevent_initial_call=True,
+)
+def download_csv(n):
+    if not n:
+        return no_update
+    df = load_template_csv()
+    if df is None:
+        return no_update
+    return dcc.send_data_frame(df.to_csv, "sofiv2_catalog.csv", index=False)
+
+
+@callback(
+    Output("download-json", "data"),
+    Input("dl-json-btn", "n_clicks"),
+    prevent_initial_call=True,
+)
+def download_json(n):
+    if not n:
+        return no_update
+    df = load_template_csv()
+    if df is None:
+        return no_update
+    return dcc.send_data_frame(df.to_json, "sofiv2_catalog.json", orient="records", indent=2)
+
+
+@callback(
+    Output("download-full", "data"),
+    Input("dl-full-btn", "n_clicks"),
+    prevent_initial_call=True,
+)
+def download_full(n):
+    if not n:
+        return no_update
+    df = load_template_csv()
+    if df is None:
+        return no_update
+    det = auto_detect(df)
+    if det["ra"] and det["dec"]:
+        try:
+            coords = compute_coords(df, det["ra"], det["dec"])
+            gal = coords.galactic
+            df = df.copy()
+            df["l_Galactic"] = [round(g.l.degree, 6) for g in gal]
+            df["b_Galactic"] = [round(g.b.degree, 6) for g in gal]
+        except Exception:
+            pass
+    return dcc.send_data_frame(df.to_csv, "sofiv2_catalog_full.csv", index=False)
+
+
 # ═══════════════════════════════════════════════════════════
 #  RUN
 # ═══════════════════════════════════════════════════════════
+server = app.server  # Gunicorn entry point
+
 if __name__ == "__main__":
-    app.run(debug=True, port=8050)
+    import os
+    port = int(os.environ.get("PORT", 8050))
+    debug = os.environ.get("RENDER") is None  # debug off on Render
+    app.run(debug=debug, host="0.0.0.0", port=port)

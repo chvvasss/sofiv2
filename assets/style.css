@@ -520,3 +520,182 @@ input[type="range"]::-webkit-slider-thumb {
     animation: spin 0.6s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════ */
+/*  DATA REPORT — White detailed cards                    */
+/* ═══════════════════════════════════════════════════════ */
+
+/* Download bar */
+.report-download-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+/* Section wrapper */
+.report-table-section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.report-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f5f9;
+}
+.report-section-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+.report-section-meta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 500;
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* Star detail cards */
+.report-star-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+}
+.report-star-card {
+    background: #fafbfc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.report-star-card:hover {
+    border-color: #818cf8;
+    box-shadow: 0 2px 12px rgba(129,140,248,0.1);
+}
+.report-star-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+.report-star-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+.report-star-catalog {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 500;
+}
+.report-star-fields {
+    padding: 12px 18px;
+}
+
+/* Field rows inside star cards */
+.report-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.report-field:last-child { border-bottom: none; }
+.report-field-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    min-width: 100px;
+}
+.report-field-value {
+    font-size: 0.82rem;
+    color: #1e293b;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    text-align: right;
+}
+
+/* Completeness bars */
+.completeness-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.completeness-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+}
+.completeness-col {
+    font-size: 0.78rem;
+    color: #475569;
+    font-weight: 600;
+    min-width: 140px;
+    flex-shrink: 0;
+}
+.completeness-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.completeness-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+.completeness-pct {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: right;
+}
+
+/* Coordinate reference info */
+.report-coord-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.report-coord-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+}
+.report-coord-item .report-field-label {
+    color: #475569;
+}
+.report-coord-item .report-field-value {
+    color: #334155;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}

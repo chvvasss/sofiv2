@@ -1,0 +1,9 @@
+# Sofiv2 — Render deployment dependencies
+numpy>=2.1.0
+pandas>=2.2.0
+scipy>=1.14.0
+astropy>=7.0.0
+astroquery>=0.4.7
+plotly>=5.18.0
+dash>=2.18.0
+gunicorn>=22.0.0

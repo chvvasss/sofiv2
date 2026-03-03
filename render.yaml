@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: sofiv2
+    runtime: python
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: gunicorn app:server --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.3"
+      - key: RENDER
+        value: "true"
+    autoDeploy: true
