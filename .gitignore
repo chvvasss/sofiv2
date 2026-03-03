@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Astronomy data files (too large for git)
+*.fits
+*.fit
+*.fz
+*.fits.gz
+*.vot
+*.votable
+
+# Large catalogs
+Historical/*.csv
+Modern/*.csv
+Processed/*.csv
+!templates/*.csv
+
+# TOPCAT/STILTS/Java (large binaries)
+tools/*.jar
+tools/java/
+
+# Environment
+.env
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Generated plots
+Visualizations/*.png
+Visualizations/*.pdf
+Visualizations/*.svg
